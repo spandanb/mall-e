@@ -40,7 +40,7 @@ def download_file(src_url, dest_path, force=False):
     wget.download(src_url, dest_path)
 
 
-def download_wit_images(metadata_file, datadir, maxcount=1000):
+def download_wit_images(metadata_file, datadir, maxcount=100):
     """
     download's WIT images in required format.
         2 files dir/<image>.jpg, and dir/<image>.txt
