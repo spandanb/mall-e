@@ -34,7 +34,7 @@ def download_file(src_url, dest_path, force=False):
     '''
     if not force:
         if os.path.exists(dest_path):
-            print(f'destpath exists [{dest_path}]')
+            print(f'destpath exists [{dest_path}]! skipping')
             return
 
     wget.download(src_url, dest_path)
@@ -106,8 +106,22 @@ def download_wit_images(metadata_file, datadir, maxcount=1000):
 
 
 def unzip_file(filepath):
-    cmd = f'gunzip {filepath}'
-    os.system(cmd)
+    '''
+    unzip (foo.bar.gz) file and return extracted file path
+    '''
+
+    assert filepath[-3:] == '.gz', "expected .gz file"
+
+    extracted = filepath[:-3]
+    # strip gz extension
+    if not os.file.exists(filepath):
+        print('skipping unzip; gz file not found')
+
+        cmd = f'gunzip {filepath}'
+        print(f'Running: {cmd}')
+        os.system(cmd)
+
+    return extracted
 
 
 def main():
@@ -118,14 +132,14 @@ def main():
     print(f'metadata file is: {metadata_fpath}')
 
     # unzip metadata file
-    unzip_file(metadata_fpath)
+    metadata_fpath = unzip_file(metadata_fpath)
 
     if not os.path.exists(DATADIR):
         os.mkdir(DATADIR)
 
     download_file(metadata_url, DATADIR, metadata_fpath)
 
-    # download_wit_images(metadata_file)
+    download_wit_images(metadata_file)
 
 
 main()
